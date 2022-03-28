@@ -17,7 +17,6 @@ public class ListHub : Hub
     }
 
     public async Task GetList(string id) {
-        Console.WriteLine("getlist");
         await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(TestList.List.GetList()));
     }
 }

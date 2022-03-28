@@ -11,7 +11,7 @@ using bagit_api.Data;
 namespace bagit_api.Data.Migrations
 {
     [DbContext(typeof(BagItDbContext))]
-    [Migration("20220322013345_M1")]
+    [Migration("20220328211606_M1")]
     partial class M1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

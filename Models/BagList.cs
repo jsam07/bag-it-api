@@ -11,7 +11,7 @@ public class BagList
     {
         // TODO: Refactor this 
         var optionsBuilder = new DbContextOptionsBuilder<BagItDbContext>();
-        optionsBuilder.UseSqlite("DataSource=app.db;Cache=Shared");
+        optionsBuilder.UseSqlite("DataSource=wwwroot/app.db;Cache=Shared");
 
         _context = new BagItDbContext(optionsBuilder.Options);
     }

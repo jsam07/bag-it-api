@@ -6,7 +6,7 @@ const deleteBtns = document.getElementsByTagName("li");
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("https://localhost:7210/listHub")
-    // .withUrl("https://bagit-api.azurewebsites.net/listHub")
+    // .withUrl("https://bag-it-api.azurewebsites.net/listHub")
     .withAutomaticReconnect()
     .build();
 
@@ -20,7 +20,7 @@ connection
     .catch((e) => console.log(e));
 
 connection.on("ItemsUpdated", (listArray) => {
-    console.log(listArray);
+    
     appendList(listArray);
 });
 
@@ -38,12 +38,13 @@ function deleteSelf(button) {
 }
 
 function appendList(listArray) {
-    list.remove();
-    list = document.createElement("ul");
-    form.appendChild(list);
+
+    list.innerHTML = "";
+    listArray = JSON.parse(listArray);
+    
     listArray.forEach((item) => {
         const li = document.createElement("li");
-        li.innerHTML = `${item.name}---<button onclick="deleteSelf(this)" value="${item.name}">X</button>`;
+        li.innerHTML = `${item.Name}---<button onclick="deleteSelf(this)" value="${item.Name}">X</button>`;
         list.appendChild(li);
     });
 }
