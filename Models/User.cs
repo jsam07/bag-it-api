@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace bagit_api.Models;
 
-
 public class User : IdentityUserLogin<int>
 {
     [Key]
@@ -12,7 +11,7 @@ public class User : IdentityUserLogin<int>
     
     [DisplayName("Username")]
     [MaxLength(70, ErrorMessage="Username must be 70 characters or less")]
-    public string? Username { get; set; }
+    public string Username { get; set; }
     
     [DisplayName("Email")]
     [Required(ErrorMessage = "An email address is required.")]
@@ -25,7 +24,9 @@ public class User : IdentityUserLogin<int>
     [DisplayName("Last Name")]
     [MaxLength(50, ErrorMessage="Last Name must be 50 characters or less")]
     public string? LastName { get; set; }
+    
     public string? Password { get; set; }
+
     public string? Address { get; set; }
     public string? Phone { get; set; }
     public DateTime? CreatedAt { get; set; }

@@ -6,7 +6,7 @@ const deleteBtns = document.getElementsByTagName("li");
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("https://localhost:7210/listHub")
-    // .withUrl("https://bag-it-api.azurewebsites.net/listHub")
+    // .withUrl("https://bag-it-api.azurewebsites.net/listHub", { accessTokenFactory: () => this.loginToken })
     .withAutomaticReconnect()
     .build();
 
