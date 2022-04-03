@@ -11,7 +11,7 @@ public class User : IdentityUserLogin<int>
     
     [DisplayName("Username")]
     [MaxLength(70, ErrorMessage="Username must be 70 characters or less")]
-    public string Username { get; set; }
+    public string? Username { get; set; }
     
     [DisplayName("Email")]
     [Required(ErrorMessage = "An email address is required.")]
@@ -32,5 +32,5 @@ public class User : IdentityUserLogin<int>
     public DateTime? CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
     
-    public List<UserShoppingList> UserShoppingLists { get; set; }
+    public List<UserShoppingList>? UserShoppingLists { get; set; }
 }

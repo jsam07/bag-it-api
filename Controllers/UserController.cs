@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using bagit_api.Data;
 using bagit_api.Models;
@@ -9,6 +12,7 @@ using bagit_api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace bagit_api.Controllers
 {
@@ -18,27 +22,26 @@ namespace bagit_api.Controllers
     {
 
         private readonly BagItDbContext _context;
-        public UserController(BagItDbContext context)
+        private readonly SecurityService _security;
+        private readonly IConfiguration _configuration;
+        public UserController(BagItDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+            _security = new SecurityService(Options.Create(new HashingOptions()));
+            
         }
-        // GET: api/User
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            return "BagIt API v1.2";
         }
+        
 
-        // GET: api/User/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/User
+        [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User user)
+        public async Task<ActionResult> RegisterUser([FromBody] User user)
         {
             try
             {
@@ -57,12 +60,47 @@ namespace bagit_api.Controllers
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
                 
-                return NoContent();
+                return Ok();
             }
             catch (Exception e)
             {
                 return Problem();
             }
+        }
+        
+        [Route("login")]
+        [HttpPost]
+        public async Task<ActionResult> Login([FromBody] User _user)
+        {
+            var user = _context.Users
+                .FirstOrDefault(u => u.Email == _user.Email);
+            if (user != null && _security.Check(user.Password, _user.Password))
+            {
+                var claim = new[] {
+                    new Claim("id", user.UserId.ToString())
+                };
+                var signinKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]));
+
+                int expiryInMinutes = Convert.ToInt32(_configuration["Jwt:ExpiryInMinutes"]);
+
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["Jwt:Site"],
+                    audience: _configuration["Jwt:Site"],
+                    claims: claim,
+                    expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
+                    signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
+                );
+
+                return Ok(
+                    new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo
+                    });
+            }
+            return Unauthorized();
+
         }
 
         private List<string> VerifyRegistration(User user)
@@ -96,18 +134,6 @@ namespace bagit_api.Controllers
                 .FirstOrDefault(u => u.Email == email);
 
             return user != null;
-        }
-
-        // PUT: api/User/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/User/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

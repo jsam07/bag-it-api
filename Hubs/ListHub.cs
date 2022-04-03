@@ -1,10 +1,12 @@
 using bagit_api.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 
 namespace bagit_api.Hubs;
 
 
+[Authorize]
 public class ListHub : Hub
 {
     private readonly ListController _listController;

@@ -4,9 +4,9 @@ const newBtn = document.getElementById("btn-new");
 const nameText = document.getElementById("name-text");
 const deleteBtns = document.getElementsByTagName("li");
 
-let index = 0;
+let jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJleHAiOjE2NDg5ODkxNTEsImlzcyI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCIsImF1ZCI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCJ9.tVCjZLrf8GuY5hccDXKV0tZjoBAvMokeT68iUk2mI0Q"
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:7210/listHub", { accessTokenFactory: () => "testing" })
+    .withUrl("https://localhost:7210/listHub", { accessTokenFactory: () => jwt })
     // .withUrl("https://bag-it-api.azurewebsites.net/listHub", { accessTokenFactory: () => this.loginToken })
     .withAutomaticReconnect()
     .build();
