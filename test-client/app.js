@@ -4,8 +4,9 @@ const newBtn = document.getElementById("btn-new");
 const nameText = document.getElementById("name-text");
 const deleteBtns = document.getElementsByTagName("li");
 
+let index = 0;
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:7210/listHub")
+    .withUrl("https://localhost:7210/listHub", { accessTokenFactory: () => "testing" })
     // .withUrl("https://bag-it-api.azurewebsites.net/listHub", { accessTokenFactory: () => this.loginToken })
     .withAutomaticReconnect()
     .build();
@@ -31,6 +32,9 @@ newBtn.addEventListener("click", (e) => {
             .catch((e) => console.log(e));
     }
 });
+const _token = () => connection.invoke('GetList', "listId").then(r => console.log(r));
+const _testToken = (token) => (token ? fetch('https://localhost:7210/token?access_token=' + token) : fetch('https://localhost:7210/token'))
+    .then(r => r.text()).then(t => console.log(t));
 
 function deleteSelf(button) {
     console.log(button.value);

@@ -3,11 +3,11 @@ using bagit_api.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace bagit_api.Models;
-public class BagList
+public class BagIt
 {
     private readonly BagItDbContext _context;
 
-    public BagList()
+    public BagIt()
     {
         // TODO: Refactor this 
         var optionsBuilder = new DbContextOptionsBuilder<BagItDbContext>();
@@ -40,6 +40,7 @@ public class BagList
     }
     public void DeleteItem(string name)
     {
+        // TODO: Let caller pass in listID and product ID to delete
         _context.Products.RemoveRange(_context.Products.Where(
             p => p.Name == name
             ));
@@ -49,6 +50,19 @@ public class BagList
 
     public List<Product> GetList()
     {
+        // TODO: Let call pass in ListID
         return _context.Products.ToList();
+    }
+
+    public string CreateList(string userId)
+    {
+        // TODO: Create new list for given user
+        return "";
+    }
+
+    public bool ShareListWithUser(string ownerId, string listID, string userId)
+    {
+        // TODO: Share list with given user
+        return false;
     }
 }

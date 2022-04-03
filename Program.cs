@@ -30,10 +30,12 @@ builder.Services.AddControllers()
         x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+
 
 var app = builder.Build();
 
@@ -46,9 +48,16 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
+app.UseStaticFiles();
 app.UseCors(AllowOrigins);
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<ListHub>("/listHub");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ListHub>("/listHub");
+});
 
 app.Run();
