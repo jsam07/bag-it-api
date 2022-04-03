@@ -1,5 +1,5 @@
+using bagit_api.Controllers;
 using Microsoft.AspNetCore.SignalR;
-using bagit_api.Models;
 
 
 namespace bagit_api.Hubs;
@@ -7,25 +7,25 @@ namespace bagit_api.Hubs;
 
 public class ListHub : Hub
 {
-    private readonly BagIt _bagit;
+    private readonly ListController _listController;
     public ListHub()
     {
-        _bagit = new BagIt();
+        _listController = new ListController();
     }
     
     public async Task AddItemToList(string itemName, string quantity)
     {
-        _bagit.AddItem(itemName, quantity);
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_bagit.GetList()));
+        _listController.AddItem(itemName, quantity);
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
     }
     public async Task RemoveItemFromList(string name)
     {
-        _bagit.DeleteItem(name);
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_bagit.GetList()));
+        _listController.DeleteItem(name);
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
     }
     
     public async Task GetList(string id) {
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_bagit.GetList()));
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
     }
     
 }
