@@ -1,7 +1,6 @@
 # BagIt Backend
 
 🛡️ This repository houses the backend for [BagIt](https://github.com/jsam07/bag-it). BagIt a mobile application that improves the grocery shopping experience, by allowing users to easily create and share shopping lists.
-
 ## Architecture
 The BagIt backend is shown below (highlighted in red). 
 <p align="center">
@@ -32,7 +31,11 @@ Clients that are successfully authenticated receive a JSON Web Token (JWT) that 
         
 2. **SignalR Hub** - The Hub allows for real-time client-to-server (and server-to-client) communication. The former means that users receive shopping list updates in real-time. Unauthorized clients are not able to invoke Hub methods.
 
-3. **SQLite Database** - This self-contained database stores all the list information and users.
+3. **SQLite Database** - This self-contained database stores all the list information and users. See the ERD diagram below.
+
+<p align="center">
+    <img alt="Search" src="./Assets/ERD_Diagram.png" width="100%"/>
+</p>
 
 
 ### Built With
