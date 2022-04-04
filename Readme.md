@@ -10,7 +10,8 @@ The BagIt backend is shown below (highlighted in red).
 The backend consists of three(3) main components:
 
 1. **User Authentication API** - Users must first register and login to be able to access the SignalR Hub. 
-Clients that are successfully authenticated receive a JSON Web Token (JWT) that can then use to access the Hub.
+Clients that are successfully authenticated receive a JSON Web Token (JWT) that can then use to access the Hub. 
+The API is deploy on Microsoft Azure and can ge accessed here: `https://bag-it-api.azurewebsites.net/api/user`
  The endpoints for the API are as follows:
    ### `GET`
    - `/api/user`: Test that the user endpoint works
@@ -27,9 +28,10 @@ Clients that are successfully authenticated receive a JSON Web Token (JWT) that 
       - Body:
           - `Email: String` (required): The email address of the user
           - `Password: String` (required): The password of the user
-
+      
         
-2. **SignalR Hub** - The Hub allows for real-time client-to-server (and server-to-client) communication. The former means that users receive shopping list updates in real-time. Unauthorized clients are not able to invoke Hub methods.
+2. **SignalR Hub** - The Hub allows for real-time client-to-server (and server-to-client) communication. The former means that users receive shopping list updates in real-time. Unauthorized clients are not able to invoke Hub methods. 
+The Hub is deploy on Microsoft Azure and can ge accessed here, assuming the valid jwt is supplied (see *3.* below) : `https://bag-it-api.azurewebsites.net/listHub`
 
 3. **SQLite Database** - This self-contained database stores all the list information and users. See the ERD diagram below.
 
