@@ -60,7 +60,13 @@ namespace bagit_api.Controllers
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
                 
-                return Ok();
+                var token = GenerateToken(user); 
+                return Ok(
+                    new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo
+                    });
             }
             catch (Exception e)
             {
@@ -76,22 +82,7 @@ namespace bagit_api.Controllers
                 .FirstOrDefault(u => u.Email == _user.Email);
             if (user != null && _security.Check(user.Password, _user.Password))
             {
-                var claim = new[] {
-                    new Claim("id", user.UserId.ToString())
-                };
-                var signinKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]));
-
-                int expiryInMinutes = Convert.ToInt32(_configuration["Jwt:ExpiryInMinutes"]);
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["Jwt:Site"],
-                    audience: _configuration["Jwt:Site"],
-                    claims: claim,
-                    expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
-                    signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
-                );
-
+                var token = GenerateToken(user); 
                 return Ok(
                     new
                     {
@@ -107,12 +98,12 @@ namespace bagit_api.Controllers
         {
             List<string> errors = new List<string>();
 
-            if (isUsernameTaken(user.Username))
+            if (IsUsernameTaken(user.Username))
             {
                 errors.Add("Username is already taken.");
             }
             
-            if (isEmailTaken(user.Email))
+            if (IsEmailTaken(user.Email))
             {
                 errors.Add("Email is already taken.");
             }
@@ -120,7 +111,7 @@ namespace bagit_api.Controllers
             return errors;
         }
         
-        private bool isUsernameTaken(string username)
+        private bool IsUsernameTaken(string username)
         {
             var user = _context.Users
                 .FirstOrDefault(u => u.Username == username);
@@ -128,12 +119,32 @@ namespace bagit_api.Controllers
             return user != null;
         }
         
-        private bool isEmailTaken(string email)
+        private bool IsEmailTaken(string email)
         {
             var user = _context.Users
                 .FirstOrDefault(u => u.Email == email);
 
             return user != null;
         }
+
+        private JwtSecurityToken GenerateToken(User user)
+        {
+            var claim = new[] {
+                new Claim("id", user.UserId.ToString())
+            };
+            var signinKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]));
+
+            int expiryInMinutes = Convert.ToInt32(_configuration["Jwt:ExpiryInMinutes"]);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Site"],
+                audience: _configuration["Jwt:Site"],
+                claims: claim,
+                expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
+                signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
+            );
+            return token;
+        } 
     }
 }
