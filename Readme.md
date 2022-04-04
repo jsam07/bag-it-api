@@ -59,8 +59,15 @@ The server is now running on ` https://localhost:7210`. You can now make API req
 
 ### 3. Testing SignalR Hub
 
-Use the `test-client` example project in the root of the project to test Hub invocations. Recall, you can only access the Hub by providing a valid jwt (generated after sucessful login). See below for an example:
-
+Recall, you can only access the Hub by providing a valid jwt (generated after successful login). See below for an example:
+The jwt token can be obtained by authenticating via the `api/user/login` route specified above - the response shape is as follows:
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJleHAiOjE2NDkwNjA4MzksImlzcyI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCIsImF1ZCI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCJ9.GscRb0fipj79Abl3aUQoT6zUpjxn6oIV0v_SI6t7RME",
+    "expiration": "2022-04-04T08:27:19Z"
+}
+```
+Use the `test-client` example project in the root directory to test Hub invocations:
 ```js
 let jwt = "token_here"
 const connection = new signalR.HubConnectionBuilder()
