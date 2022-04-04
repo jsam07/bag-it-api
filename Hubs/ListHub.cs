@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace bagit_api.Hubs;
 
 
-[Authorize]
+// [Authorize]
 public class ListHub : Hub
 {
     private readonly ListController _listController;

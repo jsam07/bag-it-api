@@ -82,5 +82,5 @@ const connection = new signalR.HubConnectionBuilder()
 ## Status
 
 <p align="center">
-    <img alt="Search" src="https://repobeats.axiom.co/api/embed/51de371514a0371cff566ad97931170c051f4d20.svg" width="100%"/>
+    <img alt="Search" src="https://repobeats.axiom.co/api/embed/91cbe4c222135d9b0057a9dbea404f3bb994a85a.svg" width="100%"/>
 </p>
