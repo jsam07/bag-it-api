@@ -35,7 +35,7 @@ namespace bagit_api.Controllers
         [HttpGet]
         public string Get()
         {
-            return "BagIt API v1.2";
+            return "BagIt User Authentication API v1.3";
         }
         
 

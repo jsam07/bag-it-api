@@ -8,7 +8,7 @@ let jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJleHAiOjE2NDg5ODkx
 let jwt2 = "";
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("https://localhost:7210/listHub", { accessTokenFactory: () => jwt })
-    .withUrl("https://bag-it-api.azurewebsites.net/listHub", { accessTokenFactory: () => jwt2 })
+    // .withUrl("https://bag-it-api.azurewebsites.net/listHub", { accessTokenFactory: () => jwt2 })
     .withAutomaticReconnect()
     .build();
 
