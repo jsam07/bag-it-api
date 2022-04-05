@@ -54,7 +54,7 @@ namespace bagit_api.Data.Migrations
                 {
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
                     Icon = table.Column<string>(type: "TEXT", nullable: true),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: true),
                     Category = table.Column<string>(type: "TEXT", nullable: true),
@@ -265,7 +265,7 @@ namespace bagit_api.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CreatedAt", "Email", "FirstName", "LastName", "ModifiedAt", "Password", "Phone", "Username" },
-                values: new object[] { 1, null, null, "test@gmail.com", null, null, null, "10000.VfQY04EaOrHv/IBBDu8alg==.vBlzfjFuiJFnY83DS9dyhp++Iw6z3FonWW3bdZky6FM=", null, "test_user" });
+                values: new object[] { 1, null, null, "test@gmail.com", null, null, null, "10000.FpH5C14urH9w5byZ7ma/uw==.IS5EZYV7ZFxW4SCkLhAW/tlETX8rQFBW8pvC9BAUmfY=", null, "test_user" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

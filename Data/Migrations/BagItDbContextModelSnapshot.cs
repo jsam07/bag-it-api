@@ -33,7 +33,6 @@ namespace bagit_api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("Quantity")
@@ -138,7 +137,7 @@ namespace bagit_api.Data.Migrations
                         {
                             UserId = 1,
                             Email = "test@gmail.com",
-                            Password = "10000.VfQY04EaOrHv/IBBDu8alg==.vBlzfjFuiJFnY83DS9dyhp++Iw6z3FonWW3bdZky6FM=",
+                            Password = "10000.FpH5C14urH9w5byZ7ma/uw==.IS5EZYV7ZFxW4SCkLhAW/tlETX8rQFBW8pvC9BAUmfY=",
                             Username = "test_user"
                         });
                 });
