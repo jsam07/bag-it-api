@@ -2,11 +2,17 @@
 using bagit_api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace bagit_api.Controllers;
 
-public class ListController : Controller
+ 
+[ApiController]
+[Route("api/[controller]")]
+public class ListController : ControllerBase
 {
+   
     private readonly BagItDbContext _context;
 
     public ListController()
@@ -16,7 +22,9 @@ public class ListController : Controller
 
         _context = new BagItDbContext(optionsBuilder.Options);
     }
-    
+
+    [Route("{listId}/add")]
+    [HttpPost]
     public void AddItem(string itemName, string quantity)
     {
         // TODO: Let caller pass these parameters in
@@ -39,6 +47,8 @@ public class ListController : Controller
         _context.SaveChanges();
         Console.WriteLine($"\nAdded Product: {itemName} x{quantity}");
     }
+
+    [HttpDelete]
     public void DeleteItem(string name)
     {
         // TODO: Let caller pass in listID and product ID to delete
@@ -49,18 +59,34 @@ public class ListController : Controller
         Console.WriteLine($"\nDeleted Product: {name}");
     }
 
+    [HttpGet]
+    public List<Product> GetUserLists()
+    {
+        // TODO: Let call pass in ListID
+        return _context.Products.ToList();
+    }
+
+    [Route("{listId}/")]
+    [HttpGet]
     public List<Product> GetList()
     {
         // TODO: Let call pass in ListID
         return _context.Products.ToList();
     }
 
-    public string CreateList(string userId)
+    [HttpPost]
+    public ShoppingList CreateList(string listName, string token)
     {
         // TODO: Create new list for given user
-        return "";
+        ShoppingList list = new ShoppingList()
+        {
+            Name = listName,
+        };
+        return list;
     }
 
+    [Route("{listId}/share")]
+    [HttpPost]
     public bool ShareListWithUser(string ownerId, string listID, string userId)
     {
         // TODO: Share list with given user
