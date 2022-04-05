@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace bagit_api.Models;
 
-public class User : IdentityUserLogin<int>
+public class User: IdentityUser<int>
 {
     [Key]
     public int UserId { get; set; }
