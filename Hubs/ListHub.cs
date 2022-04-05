@@ -23,14 +23,14 @@ public class ListHub : Hub
         var deserializedProduct = System.Text.Json.JsonSerializer.Deserialize<Product>(product);
 
         _listController.AddItem(deserializedProduct, listId);
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList(listId)));
     }
     public async Task RemoveItemFromList(string product, int listId)
     {
         var deserializedProduct = System.Text.Json.JsonSerializer.Deserialize<Product>(product);
 
         _listController.DeleteItem(deserializedProduct, listId);
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList(listId)));
     }
 
     public async Task GetUserLists() {
@@ -43,8 +43,8 @@ public class ListHub : Hub
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
     
-    public async Task GetList(string id) {
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
+    public async Task GetList(int id) {
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList(id)));
     }
     
     public int UserIdFromToken() {

@@ -37,24 +37,38 @@ public class ListController : Controller
     public void DeleteItem(Product product, int listId)
     {
         // TODO: Let caller pass in listID and product ID to delete
-        _context.ShoppingLists.RemoveRange(_context.ShoppingLists.Where(
-            l => l.ListId == listId
-        ));
-        
+        var products = _context.Products.Include(p => p.ShoppingListProducts)
+                  .ThenInclude(ec => ec.List)
+                  .Where(p => p.ProductId == product.ProductId);
 
-
-        // _context.Products.RemoveRange(_context.Products.Where(
-        //     p => p.ProductId == product.ProductId
-        // ));
+        _context.RemoveRange(products);
 
         _context.SaveChanges();
-        Console.WriteLine($"\nDeleted Product: {product.Name}");
+        Console.WriteLine($"\nDeleted Product: {product.ProductId}");
     }
 
-    public List<Product> GetList()
+    public List<Product> GetList(int id)
     {
         // TODO: Let call pass in ListID
-        return _context.Products.ToList();
+        // return list when it matches id 
+        // var list = _context.ShoppingLists.Where(l => l.ListId == id).FirstOrDefault();
+        // var products = list.ShoppingListProducts.Where(l => l.ListId == id);
+        // return products.Where(l => l.ListId == id);
+
+        // return _context.ShoppingLists
+        //     .Include(p => p.ShoppingListProducts)
+        //     .ThenInclude(ShoppingListProduct => ShoppingListProduct.Product)
+        //     .Where(p => p.ListId == id).ToList();
+
+        // return await _context.ShoppingLists.Where(p => p.ListId == id).Include(p => p.ShoppingListProducts).ThenInclude(p => p.Product).ToListAsync();
+
+        // _context.ShoppingLists.Include(ec => ec.ShoppingListProducts)
+        //             .Include(ec => ec.ListId)
+        //             .Select(ec => ec.ShoppingListProducts)
+
+        return _context.Products.Include(e => e.ShoppingListProducts)
+                  .ThenInclude(ec => ec.List).ToList();
+
     }
 
     public async Task<ShoppingList> CreateList(string listName, int userId)
