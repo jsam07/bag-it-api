@@ -114,7 +114,12 @@ namespace bagit_api.Controllers
         private bool IsUsernameTaken(string username)
         {
             var user = _context.Users
-                .FirstOrDefault(u => u.Username == username);
+                .FirstOrDefault(u => 
+                    (
+                        u.Username != null && 
+                        u.Username.Trim() != username &&
+                        u.Username == username
+                    ));
 
             return user != null;
         }
