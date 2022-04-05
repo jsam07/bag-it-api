@@ -137,7 +137,7 @@ namespace bagit_api.Data.Migrations
                         {
                             UserId = 1,
                             Email = "test@gmail.com",
-                            Password = "10000.FpH5C14urH9w5byZ7ma/uw==.IS5EZYV7ZFxW4SCkLhAW/tlETX8rQFBW8pvC9BAUmfY=",
+                            Password = "10000.MaPWONejpnY0ioWvJzz4+Q==.G1X5khHWCsz4IrDoyVyzIkOmEI63lB3VHb/xgm71+Fo=",
                             Username = "test_user"
                         });
                 });

@@ -11,8 +11,8 @@ using bagit_api.Data;
 namespace bagit_api.Data.Migrations
 {
     [DbContext(typeof(BagItDbContext))]
-    [Migration("20220405020501_M1")]
-    partial class M1
+    [Migration("20220405155735_m1")]
+    partial class m1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -139,7 +139,7 @@ namespace bagit_api.Data.Migrations
                         {
                             UserId = 1,
                             Email = "test@gmail.com",
-                            Password = "10000.FpH5C14urH9w5byZ7ma/uw==.IS5EZYV7ZFxW4SCkLhAW/tlETX8rQFBW8pvC9BAUmfY=",
+                            Password = "10000.MaPWONejpnY0ioWvJzz4+Q==.G1X5khHWCsz4IrDoyVyzIkOmEI63lB3VHb/xgm71+Fo=",
                             Username = "test_user"
                         });
                 });

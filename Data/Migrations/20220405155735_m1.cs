@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace bagit_api.Data.Migrations
 {
-    public partial class M1 : Migration
+    public partial class m1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -265,7 +265,7 @@ namespace bagit_api.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CreatedAt", "Email", "FirstName", "LastName", "ModifiedAt", "Password", "Phone", "Username" },
-                values: new object[] { 1, null, null, "test@gmail.com", null, null, null, "10000.FpH5C14urH9w5byZ7ma/uw==.IS5EZYV7ZFxW4SCkLhAW/tlETX8rQFBW8pvC9BAUmfY=", null, "test_user" });
+                values: new object[] { 1, null, null, "test@gmail.com", null, null, null, "10000.MaPWONejpnY0ioWvJzz4+Q==.G1X5khHWCsz4IrDoyVyzIkOmEI63lB3VHb/xgm71+Fo=", null, "test_user" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using bagit_api.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
