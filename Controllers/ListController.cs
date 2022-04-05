@@ -7,10 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace bagit_api.Controllers;
 
- 
-[ApiController]
-[Route("api/[controller]")]
-public class ListController : ControllerBase
+public class ListController : Controller
 {
    
     private readonly BagItDbContext _context;
@@ -22,9 +19,7 @@ public class ListController : ControllerBase
 
         _context = new BagItDbContext(optionsBuilder.Options);
     }
-
-    [Route("{listId}/add")]
-    [HttpPost]
+    
     public void AddItem(string itemName, string quantity)
     {
         // TODO: Let caller pass these parameters in
@@ -47,46 +42,54 @@ public class ListController : ControllerBase
         _context.SaveChanges();
         Console.WriteLine($"\nAdded Product: {itemName} x{quantity}");
     }
-
-    [HttpDelete]
     public void DeleteItem(string name)
     {
         // TODO: Let caller pass in listID and product ID to delete
         _context.Products.RemoveRange(_context.Products.Where(
             p => p.Name == name
         ));
+
         _context.SaveChanges();
         Console.WriteLine($"\nDeleted Product: {name}");
     }
 
-    [HttpGet]
-    public List<Product> GetUserLists()
-    {
-        // TODO: Let call pass in ListID
-        return _context.Products.ToList();
-    }
-
-    [Route("{listId}/")]
-    [HttpGet]
     public List<Product> GetList()
     {
         // TODO: Let call pass in ListID
         return _context.Products.ToList();
     }
 
-    [HttpPost]
-    public ShoppingList CreateList(string listName, string token)
+    public ShoppingList CreateList(string listName, int userId)
     {
         // TODO: Create new list for given user
         ShoppingList list = new ShoppingList()
         {
             Name = listName,
         };
+        User user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+        list.UserShoppingLists.Add(new UserShoppingList(){
+            UserId = user.UserId,
+            User = user,
+            ListId = list.ListId,
+            List = list
+        });
+        _context.ShoppingLists.Add(list);
+        _context.SaveChanges();
+
         return list;
     }
 
-    [Route("{listId}/share")]
-    [HttpPost]
+    public List<ShoppingList> GetUserLists(int userId)
+    {
+        List<ShoppingList> userLists = _context.ShoppingLists.Where(
+            l => l.UserShoppingLists.Any(
+                ul => ul.UserId == userId
+            )
+        ).ToList();
+
+        return userLists;
+    }
+
     public bool ShareListWithUser(string ownerId, string listID, string userId)
     {
         // TODO: Share list with given user

@@ -4,7 +4,7 @@ const newBtn = document.getElementById("btn-new");
 const nameText = document.getElementById("name-text");
 const deleteBtns = document.getElementsByTagName("li");
 
-let jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJleHAiOjE2NDg5ODkxNTEsImlzcyI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCIsImF1ZCI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCJ9.tVCjZLrf8GuY5hccDXKV0tZjoBAvMokeT68iUk2mI0Q"
+let jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkiLCJleHAiOjE2NDkxMjc3MjMsImlzcyI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCIsImF1ZCI6Imh0dHBzOi8vYmFnLWl0LWFwaS5henVyZXdlYnNpdGVzLm5ldCJ9.k1UHwANrjPFmAhOEJECFCJ1N1g5gXreU7zKgXPCZS9U"
 let jwt2 = "";
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("https://localhost:7210/listHub", { accessTokenFactory: () => jwt })
