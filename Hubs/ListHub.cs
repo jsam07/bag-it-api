@@ -31,11 +31,12 @@ public class ListHub : Hub
     }
 
     public async Task GetUserList() {
+        Console.WriteLine("Getuser list called");
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
 
     public async Task NewList(string ListName) {
-        _listController.CreateList(ListName, UserIdFromToken());
+        await _listController.CreateList(ListName, UserIdFromToken());
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
     

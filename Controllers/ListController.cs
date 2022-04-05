@@ -59,24 +59,50 @@ public class ListController : Controller
         return _context.Products.ToList();
     }
 
-    public ShoppingList CreateList(string listName, int userId)
+    public async Task<ShoppingList> CreateList(string listName, int userId)
     {
+
+        //   var product = new Product
+        // {
+        //     Name = itemName,
+        //     Quantity = int.Parse(quantity)
+        // };
+
+        // var slProduct = new ShoppingListProduct
+        // {
+        //     ListId = listId,
+        //     Product = product
+        // };
+
+        // _context.Add(slProduct);
+        // _context.SaveChanges();
+        
         // TODO: Create new list for given user
-        ShoppingList list = new ShoppingList()
+        ShoppingList list = new ShoppingList
         {
             Name = listName,
         };
-        User user = _context.Users.FirstOrDefault(u => u.UserId == userId);
-        list.UserShoppingLists.Add(new UserShoppingList(){
-            UserId = user.UserId,
-            User = user,
-            ListId = list.ListId,
-            List = list
-        });
-        _context.ShoppingLists.Add(list);
+        _context.Add(list);
         _context.SaveChanges();
 
-        return list;
+        User user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+        if (user != null)
+        {
+             UserShoppingList userList = new UserShoppingList{
+                UserId = userId,
+                User = user,
+                List = list,
+                ListId = list.ListId,
+            };
+
+            _context.Add(userList);
+            _context.SaveChanges();
+
+            return list;
+        }
+        return null;
+       
     }
 
     public List<ShoppingList> GetUserLists(int userId)
