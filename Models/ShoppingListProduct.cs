@@ -6,5 +6,7 @@ public class ShoppingListProduct
     public Product Product { get; set; }
 
     public int ListId { get; set; }
+    
+    [System.Text.Json.Serialization.JsonIgnore]
     public ShoppingList List { get; set; }
 }

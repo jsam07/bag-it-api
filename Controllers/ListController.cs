@@ -20,17 +20,9 @@ public class ListController : Controller
         _context = new BagItDbContext(optionsBuilder.Options);
     }
     
-    public void AddItem(string itemName, string quantity)
+    public void AddItem(Product product, int listId)
     {
         // TODO: Let caller pass these parameters in
-        int listId = 1;
-        int userId = 1;
-        
-        var product = new Product
-        {
-            Name = itemName,
-            Quantity = int.Parse(quantity)
-        };
 
         var slProduct = new ShoppingListProduct
         {
@@ -40,23 +32,43 @@ public class ListController : Controller
 
         _context.Add(slProduct);
         _context.SaveChanges();
-        Console.WriteLine($"\nAdded Product: {itemName} x{quantity}");
+        Console.WriteLine($"\nAdded Product: {product}");
     }
-    public void DeleteItem(string name)
+    public void DeleteItem(Product product, int listId)
     {
         // TODO: Let caller pass in listID and product ID to delete
-        _context.Products.RemoveRange(_context.Products.Where(
-            p => p.Name == name
-        ));
+        var products = _context.Products.Include(p => p.ShoppingListProducts)
+                  .ThenInclude(ec => ec.List)
+                  .Where(p => p.ProductId == product.ProductId);
+
+        _context.RemoveRange(products);
 
         _context.SaveChanges();
-        Console.WriteLine($"\nDeleted Product: {name}");
+        Console.WriteLine($"\nDeleted Product: {product.ProductId}");
     }
 
-    public List<Product> GetList()
+    public List<Product> GetList(int id)
     {
         // TODO: Let call pass in ListID
-        return _context.Products.ToList();
+        // return list when it matches id 
+        // var list = _context.ShoppingLists.Where(l => l.ListId == id).FirstOrDefault();
+        // var products = list.ShoppingListProducts.Where(l => l.ListId == id);
+        // return products.Where(l => l.ListId == id);
+
+        // return _context.ShoppingLists
+        //     .Include(p => p.ShoppingListProducts)
+        //     .ThenInclude(ShoppingListProduct => ShoppingListProduct.Product)
+        //     .Where(p => p.ListId == id).ToList();
+
+        // return await _context.ShoppingLists.Where(p => p.ListId == id).Include(p => p.ShoppingListProducts).ThenInclude(p => p.Product).ToListAsync();
+
+        // _context.ShoppingLists.Include(ec => ec.ShoppingListProducts)
+        //             .Include(ec => ec.ListId)
+        //             .Select(ec => ec.ShoppingListProducts)
+
+        return _context.Products.Include(e => e.ShoppingListProducts)
+                  .ThenInclude(ec => ec.List).ToList();
+
     }
 
     public async Task<ShoppingList> CreateList(string listName, int userId)

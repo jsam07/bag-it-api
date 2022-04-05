@@ -1,8 +1,7 @@
-using System.IdentityModel.Tokens.Jwt;
 using bagit_api.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using NuGet.Protocol;
+using bagit_api.Models;
 
 
 namespace bagit_api.Hubs;
@@ -18,21 +17,23 @@ public class ListHub : Hub
         _listController = new ListController();
     }
     
-    public async Task AddItemToList(string itemName, string quantity)
+    public async Task AddItemToList(string product, int listId)
     {
-        int userId = UserIdFromToken();
+        var deserializedProduct = System.Text.Json.JsonSerializer.Deserialize<Product>(product);
 
-        _listController.AddItem(itemName, quantity);
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
+        _listController.AddItem(deserializedProduct, listId);
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList(listId)));
     }
-    public async Task RemoveItemFromList(string name)
+    public async Task RemoveItemFromList(string product, int listId)
     {
-        _listController.DeleteItem(name);
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
+        var deserializedProduct = System.Text.Json.JsonSerializer.Deserialize<Product>(product);
+
+        _listController.DeleteItem(deserializedProduct, listId);
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList(listId)));
     }
 
-    public async Task GetUserList() {
-        Console.WriteLine("Getuser list called");
+    public async Task GetUserLists() {
+        Console.WriteLine("Getuser lists called");
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
 
@@ -41,8 +42,8 @@ public class ListHub : Hub
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
     
-    public async Task GetList(string id) {
-        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList()));
+    public async Task GetList(int id) {
+        await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList(id)));
     }
     
     public int UserIdFromToken() {
