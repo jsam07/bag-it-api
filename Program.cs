@@ -100,8 +100,6 @@ app.MapControllers();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<ListHub>("/listHub");
-    
-    
 });
 
 

@@ -22,8 +22,6 @@ public class ListController : Controller
     
     public void AddItem(Product product, int listId)
     {
-        // TODO: Let caller pass these parameters in
-
         var slProduct = new ShoppingListProduct
         {
             ListId = listId,
@@ -36,7 +34,6 @@ public class ListController : Controller
     }
     public void DeleteItem(Product product, int listId)
     {
-        // TODO: Let caller pass in listID and product ID to delete
         var products = _context.Products.Include(p => p.ShoppingListProducts)
                   .ThenInclude(ec => ec.List)
                   .Where(p => p.ProductId == product.ProductId);
@@ -62,7 +59,7 @@ public class ListController : Controller
             Name = listName,
         };
         _context.Add(list);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         User user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
@@ -76,7 +73,7 @@ public class ListController : Controller
             };
 
             _context.Add(userList);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return list;
         }
@@ -94,14 +91,12 @@ public class ListController : Controller
         Console.WriteLine(userLists);
         return userLists;
     }
-    
-    // ListController
+
     public async Task ShareListWithUser(int listID, string email)
     {
         User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         ShoppingList list = await _context.ShoppingLists.FirstOrDefaultAsync(l => l.ListId == listID);
         
-        Console.WriteLine(user.Email);
         if (user != null)
         {
             UserShoppingList userList = new UserShoppingList{
@@ -112,12 +107,7 @@ public class ListController : Controller
             };
 
             _context.Add(userList);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-    }
-
-    public bool ShareListWithUser(string ownerId, string listID, string userId)
-    {
-        return false;
     }
 }

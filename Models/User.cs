@@ -14,7 +14,8 @@ public class User
     public string? Username { get; set; }
     
     [DisplayName("Email")]
-    [Required(ErrorMessage = "An email address is required.")]
+    [EmailAddress(ErrorMessage = "Invalid email address")]
+    [Required(ErrorMessage = "Email address is required")]
     public string Email { get; set; }
     
     [DisplayName("First Name")]
@@ -24,14 +25,16 @@ public class User
     [DisplayName("Last Name")]
     [MaxLength(50, ErrorMessage="Last Name must be 50 characters or less")]
     public string? LastName { get; set; }
-    
-    public string? Password { get; set; }
 
+    [Required(ErrorMessage = "Password is required")]
+    public string? Password { get; set; }
     public string? Address { get; set; }
+
+    [Phone]
     public string? Phone { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
-    
+
     [System.Text.Json.Serialization.JsonIgnore]
     public List<UserShoppingList>? UserShoppingLists { get; set; }
 }
