@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bagit_api.Data;
 
@@ -10,9 +11,10 @@ using bagit_api.Data;
 namespace bagit_api.Data.Migrations
 {
     [DbContext(typeof(BagItDbContext))]
-    partial class BagItDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220405020501_M1")]
+    partial class M1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");

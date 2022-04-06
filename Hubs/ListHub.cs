@@ -43,9 +43,16 @@ public class ListHub : Hub
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
     
+    public async Task InviteUserToList(int ListId, string Email) {
+        // TODO: Add user to shoppinglist users
+        Console.WriteLine($"Hit InviteUserToList route: ListId: {ListId} |  Email: {Email}");
+        await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
+    }
+    
     public async Task GetList(int id) {
         await Clients.All.SendAsync("ItemsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetList(id)));
     }
+    
     
     public int UserIdFromToken() {
         var token = Context.GetHttpContext()?.Request.Query["access_token"].ToString();
