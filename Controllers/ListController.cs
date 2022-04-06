@@ -49,47 +49,14 @@ public class ListController : Controller
 
     public List<Product> GetList(int id)
     {
-        // TODO: Let call pass in ListID
-        // return list when it matches id 
-        // var list = _context.ShoppingLists.Where(l => l.ListId == id).FirstOrDefault();
-        // var products = list.ShoppingListProducts.Where(l => l.ListId == id);
-        // return products.Where(l => l.ListId == id);
-
-        // return _context.ShoppingLists
-        //     .Include(p => p.ShoppingListProducts)
-        //     .ThenInclude(ShoppingListProduct => ShoppingListProduct.Product)
-        //     .Where(p => p.ListId == id).ToList();
-
-        // return await _context.ShoppingLists.Where(p => p.ListId == id).Include(p => p.ShoppingListProducts).ThenInclude(p => p.Product).ToListAsync();
-
-        // _context.ShoppingLists.Include(ec => ec.ShoppingListProducts)
-        //             .Include(ec => ec.ListId)
-        //             .Select(ec => ec.ShoppingListProducts)
-
         return _context.Products.Include(e => e.ShoppingListProducts)
-                  .ThenInclude(ec => ec.List).ToList();
-
+            .ThenInclude(ec => ec.List)
+            .Where(p => p.ShoppingListProducts.Any(ec => ec.ListId == id)).ToList();
+     
     }
 
     public async Task<ShoppingList> CreateList(string listName, int userId)
     {
-
-        //   var product = new Product
-        // {
-        //     Name = itemName,
-        //     Quantity = int.Parse(quantity)
-        // };
-
-        // var slProduct = new ShoppingListProduct
-        // {
-        //     ListId = listId,
-        //     Product = product
-        // };
-
-        // _context.Add(slProduct);
-        // _context.SaveChanges();
-        
-        // TODO: Create new list for given user
         ShoppingList list = new ShoppingList
         {
             Name = listName,
@@ -124,13 +91,33 @@ public class ListController : Controller
                 ul => ul.UserId == userId
             )
         ).ToList();
-
+        Console.WriteLine(userLists);
         return userLists;
+    }
+    
+    // ListController
+    public async Task ShareListWithUser(int listID, string email)
+    {
+        User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        ShoppingList list = await _context.ShoppingLists.FirstOrDefaultAsync(l => l.ListId == listID);
+        
+        Console.WriteLine(user.Email);
+        if (user != null)
+        {
+            UserShoppingList userList = new UserShoppingList{
+                UserId = user.UserId,
+                User = user,
+                List = list,
+                ListId = list.ListId,
+            };
+
+            _context.Add(userList);
+            _context.SaveChanges();
+        }
     }
 
     public bool ShareListWithUser(string ownerId, string listID, string userId)
     {
-        // TODO: Share list with given user
         return false;
     }
 }

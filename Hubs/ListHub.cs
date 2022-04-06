@@ -14,7 +14,6 @@ public class ListHub : Hub
     private readonly ListController _listController;
     public ListHub()
     {
-
         _listController = new ListController();
     }
     
@@ -43,9 +42,9 @@ public class ListHub : Hub
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
     
-    public async Task InviteUserToList(int ListId, string Email) {
-        // TODO: Add user to shoppinglist users
-        Console.WriteLine($"Hit InviteUserToList route: ListId: {ListId} |  Email: {Email}");
+    public async Task InviteUserToList(int ListId, string Email)
+    {
+        await _listController.ShareListWithUser(ListId, Email);
         await Clients.All.SendAsync("ListsUpdated", System.Text.Json.JsonSerializer.Serialize(_listController.GetUserLists(UserIdFromToken())));
     }
     
